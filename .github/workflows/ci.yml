@@ -46,7 +46,7 @@ jobs:
           npx tsc
           npx quick-lint-js ./index*.mjs
           npm run formatCheck
-          NODE_V8_COVERAGE=coverage0 npx c8 -r lcovonly --include ./index.mjs node --experimental-test-coverage ./test/all.mjs
+          NODE_V8_COVERAGE=coverage0 npx c8 -r lcovonly --all --src ./ node --experimental-test-coverage ./test/all.mjs
         if: ${{ env.TAG_NAME == '' }}
 
       - name: Report coverage to Coveralls
