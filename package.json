@@ -1,0 +1,57 @@
+{
+  "name": "@farjs/better-sqlite3-migrate",
+  "author": "viktor-podzigun",
+  "version": "0.0.0",
+  "license": "MIT",
+  "description": "Automates Sqlite DB schema versioning",
+  "scripts": {
+    "lint": "quick-lint-js ./index*.mjs",
+    "test": "tsc && bun test && node ./test/all.mjs",
+    "format": "prettier **/*.mjs --write",
+    "formatCheck": "prettier **/*.mjs --check"
+  },
+  "type": "module",
+  "files": [
+    "index.mjs",
+    "index.d.mts",
+    "LICENSE.txt",
+    "README.md"
+  ],
+  "main": "./index.mjs",
+  "exports": "./index.mjs",
+  "types": "./index.d.mts",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farjs/better-sqlite3-migrate.git"
+  },
+  "homepage": "https://github.com/farjs/better-sqlite3-migrate",
+  "bugs": {
+    "url": "http://github.com/farjs/better-sqlite3-migrate/issues"
+  },
+  "keywords": [
+    "sqlite",
+    "sql-migration",
+    "db-migration",
+    "cross-runtime",
+    "bun"
+  ],
+  "engines": {
+    "node": ">=14.16",
+    "bun": ">=0.8"
+  },
+  "dependencies": {
+    "@farjs/better-sqlite3-wrapper": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.6.2",
+    "c8": "^7.13.0",
+    "mock-fn": "^1.1.0",
+    "prettier": "^2.8.8",
+    "quick-lint-js": "^3.0.0",
+    "typescript": "^4.9.5"
+  }
+}
