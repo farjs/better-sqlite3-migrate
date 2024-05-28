@@ -1,8 +1,10 @@
+import Database from "@farjs/better-sqlite3-wrapper";
+
 export interface MigrationBundleItem {
   readonly file: string;
   readonly content: string;
 }
 
-export type WebSqlMigrationBundle = MigrationBundleItem[];
+export type MigrationBundle = MigrationBundleItem[];
 
-export function runBundle(bundle: WebSqlMigrationBundle): Promise<void>;
+export function runBundle(db: Database, bundle: MigrationBundle): Promise<void>;
