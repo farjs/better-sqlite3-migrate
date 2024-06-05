@@ -44,8 +44,9 @@ jobs:
         run: |
           npm i
           npx tsc
-          npx quick-lint-js ./index*.mjs
+          npx quick-lint-js ./*.mjs
           npm run formatCheck
+          npx sql-bundle ./test/migrations
           NODE_V8_COVERAGE=coverage0 npx c8 -r lcovonly --all --src ./ node --experimental-test-coverage ./test/all.mjs
         if: ${{ env.TAG_NAME == '' }}
 

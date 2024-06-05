@@ -5,13 +5,17 @@
   "license": "MIT",
   "description": "Automates Sqlite DB schema versioning",
   "scripts": {
-    "lint": "quick-lint-js ./index*.mjs",
-    "test": "tsc && bun test && node ./test/all.mjs",
+    "lint": "quick-lint-js ./*.mjs",
+    "test": "npx sql-bundle ./test/migrations && tsc && bun test && node ./test/all.mjs",
     "format": "prettier **/*.mjs --write",
     "formatCheck": "prettier **/*.mjs --check"
   },
   "type": "module",
+  "bin": {
+    "sql-bundle": "sql-bundle.mjs"
+  },
   "files": [
+    "sql-bundle.mjs",
     "index.mjs",
     "index.d.mts",
     "LICENSE.txt",

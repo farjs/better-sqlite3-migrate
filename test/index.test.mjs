@@ -5,7 +5,7 @@
 import assert from "node:assert/strict";
 import mockFunction from "mock-fn";
 import Database from "@farjs/better-sqlite3-wrapper";
-import { runBundle } from "../index.mjs";
+import { runBundle, createBundle } from "../index.mjs";
 
 const { describe, it } = await (async () => {
   // @ts-ignore
@@ -385,6 +385,33 @@ describe("index.test.mjs", () => {
       `DB: Error: Cannot parse migration version and name from: ${fileName}`
     );
     assert.deepEqual(logMock.times, 1);
+  });
+
+  it("should fail if migrations dir is not specified", async () => {
+    //given
+    let capturedError = "";
+    const errorMock = mockFunction((msg) => {
+      capturedError = msg;
+    });
+    const savedError = console.error;
+    console.error = errorMock;
+
+    //when
+    let resError = null;
+    try {
+      await createBundle([]);
+    } catch (error) {
+      resError = error;
+    }
+
+    //then
+    console.error = savedError;
+    assert.deepEqual(resError, null);
+    assert.deepEqual(
+      capturedError,
+      `Error: Migrations folder path expected as first argument`
+    );
+    assert.deepEqual(errorMock.times, 1);
   });
 });
 

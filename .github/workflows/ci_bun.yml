@@ -35,4 +35,5 @@ jobs:
       - name: Run tests
         run: |
           bun install
+          bun ./sql-bundle.mjs ./test/migrations
           bun test

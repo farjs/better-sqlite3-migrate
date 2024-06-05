@@ -8,3 +8,5 @@ export interface MigrationBundleItem {
 export type MigrationBundle = MigrationBundleItem[];
 
 export function runBundle(db: Database, bundle: MigrationBundle): Promise<void>;
+
+export function createBundle(args: string[]): Promise<void>;

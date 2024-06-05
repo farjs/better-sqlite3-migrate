@@ -2,6 +2,7 @@
  * @typedef {import("@farjs/better-sqlite3-wrapper").Database} Database
  * @typedef {import("./index.mjs").MigrationBundle} MigrationBundle
  */
+import fs from "fs";
 import Database from "@farjs/better-sqlite3-wrapper";
 
 /**
@@ -12,6 +13,7 @@ import Database from "@farjs/better-sqlite3-wrapper";
  * }} SqlMigration
  */
 
+//const bundleFileName = "bundle.json";
 const dbTable = "schema_versions";
 const versionAndNameRegex = /V(\d+)__(.+).sql/i;
 const underscoreRegex = /_/g;
@@ -40,7 +42,7 @@ export async function runBundle(db, bundle) {
   }
 
   try {
-    return run(
+    run(
       db,
       bundle.map((item) => {
         const { version, name } = parseVersionAndName(item.file);
@@ -161,4 +163,28 @@ function readCurrentVersions(db) {
     const rows = query.all();
     return new Set(rows.map((r) => /** @type {number} */ (r.version)));
   })();
+}
+
+/**
+ * @param {string[]} args
+ * @returns {Promise<void>}
+ */
+export async function createBundle(args) {
+  if (args.length === 0) {
+    console.error("Error: Migrations folder path expected as first argument");
+    return;
+  }
+
+  const migrationsDir = args[0];
+  try {
+    if (!fs.lstatSync(migrationsDir).isDirectory()) {
+      console.error(`"Error: ${migrationsDir}" is not a directory`);
+      return;
+    }
+  } catch (_) {
+    console.error(`Error: Migrations folder "${migrationsDir}" doesn't exist`);
+    return;
+  }
+
+  console.log(`migrationsDir: "${migrationsDir}"`);
 }

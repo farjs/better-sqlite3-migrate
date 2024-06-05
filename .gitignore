@@ -9,3 +9,4 @@ node_modules/
 .DS_Store
 .cache
 build
+test/migrations/bundle.json
