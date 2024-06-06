@@ -47,7 +47,7 @@ jobs:
           npx quick-lint-js ./*.mjs
           npm run formatCheck
           npx sql-bundle ./test/migrations
-          NODE_V8_COVERAGE=coverage0 npx c8 -r lcovonly --all --src ./ node --experimental-test-coverage ./test/all.mjs
+          NODE_V8_COVERAGE=coverage0 npx c8 -r lcovonly --all --src ./src node --experimental-test-coverage ./test/all.mjs
         if: ${{ env.TAG_NAME == '' }}
 
       - name: Report coverage to Coveralls

@@ -14,13 +14,6 @@
   "bin": {
     "sql-bundle": "sql-bundle.mjs"
   },
-  "files": [
-    "sql-bundle.mjs",
-    "index.mjs",
-    "index.d.mts",
-    "LICENSE.txt",
-    "README.md"
-  ],
   "main": "./index.mjs",
   "exports": "./index.mjs",
   "types": "./index.d.mts",
