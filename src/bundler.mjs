@@ -30,15 +30,17 @@ export async function createBundle(args) {
   const allFiles = fs.readdirSync(migrationsDir);
   let lastModified = 0;
   let sqlFiles = /** @type {string[]} */ ([]);
-  allFiles.sort(strCompare).forEach((f) => {
-    if (f.endsWith(".sql") || f.endsWith(".SQL")) {
-      const stats = fs.lstatSync(path.join(migrationsDir, f));
-      if (lastModified < stats.mtimeMs) {
-        lastModified = stats.mtimeMs;
+  allFiles
+    .sort((a, b) => a.localeCompare(b))
+    .forEach((f) => {
+      if (f.endsWith(".sql") || f.endsWith(".SQL")) {
+        const stats = fs.lstatSync(path.join(migrationsDir, f));
+        if (lastModified < stats.mtimeMs) {
+          lastModified = stats.mtimeMs;
+        }
+        sqlFiles.push(f);
       }
-      sqlFiles.push(f);
-    }
-  });
+    });
 
   const migrationsBundle = path.join(migrationsDir, bundleFileName);
   const bundleStats = getFileStats(migrationsBundle);
@@ -69,13 +71,4 @@ function getFileStats(file) {
   } catch (_) {
     return undefined;
   }
-}
-
-/**
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function strCompare(a, b) {
-  return a === b ? 0 : a < b ? -1 : 1;
 }
