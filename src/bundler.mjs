@@ -53,7 +53,11 @@ export async function createBundle(args) {
       };
     });
 
-    fs.writeFileSync(migrationsBundle, JSON.stringify(bundleObj, undefined, 2));
+    fs.writeFileSync(
+      migrationsBundle,
+      JSON.stringify(bundleObj, undefined, 2),
+      { encoding: "utf8" }
+    );
     console.log(`Generated SQL bundle file: ${migrationsBundle}`);
     return;
   }

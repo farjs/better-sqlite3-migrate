@@ -2,10 +2,11 @@
  * @typedef {import("@farjs/better-sqlite3-wrapper").Database} Database
  * @typedef {import("../index.mjs").MigrationBundleItem} MigrationBundleItem
  */
+import { URL } from "node:url";
 import assert from "node:assert/strict";
 import mockFunction from "mock-fn";
 import Database from "@farjs/better-sqlite3-wrapper";
-import { runBundle } from "../index.mjs";
+import { readBundle, runBundle } from "../index.mjs";
 
 const { describe, it } = await (async () => {
   // @ts-ignore
@@ -349,6 +350,41 @@ describe("runner.test.mjs", () => {
       `DB: ${sqliteError}: FOREIGN KEY constraint failed`,
     ]);
     assertSchema(db, [{ version: 1, name: "non-transactional migration" }]);
+  });
+
+  it("should run migrations from bundle.json", async () => {
+    //given
+    const db = new Database(":memory:");
+    const logs = /** @type {string[]} */ ([]);
+    const logMock = mockFunction((msg) => {
+      logs.push(msg);
+    });
+    const savedLog = console.log;
+    console.log = logMock;
+
+    //when & then
+    const bundleUrl = new URL("./migrations/bundle.json", import.meta.url);
+    const bundle = await readBundle(bundleUrl);
+
+    //when
+    await runBundle(db, bundle);
+
+    //then
+    console.log = savedLog;
+    assert.deepEqual(logMock.times, 3);
+    assert.deepEqual(logs, [
+      "DB: migrating to version 1 - initial db structure",
+      "DB: migrating to version 2 - rename db field",
+      "DB: 2 migration(s) were applied successfully",
+    ]);
+    assertDb(db, [
+      { id: 1, name: "test 1" },
+      { id: 2, name: "test 2" },
+    ]);
+    assertSchema(db, [
+      { version: 1, name: "initial db structure" },
+      { version: 2, name: "rename db field" },
+    ]);
   });
 
   it("should fail if cannot parse migration version and name", async () => {

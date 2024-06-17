@@ -1,7 +1,9 @@
 /**
+ * @typedef {import("node:url").URL} URL
  * @typedef {import("@farjs/better-sqlite3-wrapper").Database} Database
  * @typedef {import("../index.mjs").MigrationBundle} MigrationBundle
  */
+import fs from "fs";
 import Database from "@farjs/better-sqlite3-wrapper";
 
 /**
@@ -15,6 +17,18 @@ import Database from "@farjs/better-sqlite3-wrapper";
 const dbTable = "schema_versions";
 const versionAndNameRegex = /V(\d+)__(.+).sql/i;
 const underscoreRegex = /_/g;
+
+/**
+ * @param {URL} url
+ * @returns {Promise<MigrationBundle>}
+ */
+export async function readBundle(url) {
+  const json = fs.readFileSync(url, { encoding: "utf8" });
+
+  /** @type {MigrationBundle} */
+  const bundle = JSON.parse(json);
+  return bundle;
+}
 
 /**
  * @param {Database} db
