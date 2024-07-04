@@ -28,15 +28,15 @@ export async function createBundle(args) {
   }
 
   const allFiles = fs.readdirSync(migrationsDir);
-  let lastModified = 0;
+  let lastModifiedMs = 0;
   let sqlFiles = /** @type {string[]} */ ([]);
   allFiles
     .sort((a, b) => a.localeCompare(b))
     .forEach((f) => {
       if (f.endsWith(".sql") || f.endsWith(".SQL")) {
         const stats = fs.lstatSync(path.join(migrationsDir, f));
-        if (lastModified < stats.mtimeMs) {
-          lastModified = stats.mtimeMs;
+        if (lastModifiedMs < stats.mtimeMs) {
+          lastModifiedMs = stats.mtimeMs;
         }
         sqlFiles.push(f);
       }
@@ -44,7 +44,11 @@ export async function createBundle(args) {
 
   const migrationsBundle = path.join(migrationsDir, bundleFileName);
   const bundleStats = getFileStats(migrationsBundle);
-  if (!bundleStats || bundleStats.mtimeMs !== lastModified) {
+  const lastModifiedSeconds = lastModifiedMs / 1000;
+  if (
+    !bundleStats ||
+    Math.trunc(bundleStats.mtimeMs / 1000) !== Math.trunc(lastModifiedSeconds)
+  ) {
     /** @type {MigrationBundle} */
     const bundleObj = sqlFiles.map((file) => {
       return {
@@ -58,11 +62,7 @@ export async function createBundle(args) {
       JSON.stringify(bundleObj, undefined, 2),
       { encoding: "utf8" }
     );
-    fs.utimesSync(
-      migrationsBundle,
-      fs.lstatSync(migrationsBundle).atimeMs / 1000,
-      lastModified / 1000
-    );
+    fs.utimesSync(migrationsBundle, lastModifiedSeconds, lastModifiedSeconds);
     console.log(`Generated SQL bundle file: ${migrationsBundle}`);
     return;
   }
