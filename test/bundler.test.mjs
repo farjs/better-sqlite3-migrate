@@ -149,7 +149,7 @@ describe("bundler.test.mjs", () => {
     assertBundleFile(migrationsBundle);
   });
 
-  it("should re-generate bundle file if it's outdated", async () => {
+  it("should re-generate bundle file if it's older", async () => {
     //given
     if (fs.existsSync(migrationsBundle)) {
       fs.unlinkSync(migrationsBundle);
@@ -175,6 +175,47 @@ describe("bundler.test.mjs", () => {
       migrationsBundle,
       bundleStats.atimeMs / 1000,
       sqlStats.mtimeMs / 1000 - 60 // set bundle time to minus 60 sec.
+    );
+
+    //when
+    await createBundle([migrationsDir]);
+
+    //then
+    console.log = savedLog;
+    assert.deepEqual(logMock.times, 2);
+    assert.deepEqual(logs, [
+      `Generated SQL bundle file: ${migrationsBundle}`,
+      `Generated SQL bundle file: ${migrationsBundle}`,
+    ]);
+    assertBundleFile(migrationsBundle);
+  });
+
+  it("should re-generate bundle file if it's newer", async () => {
+    //given
+    if (fs.existsSync(migrationsBundle)) {
+      fs.unlinkSync(migrationsBundle);
+    }
+    const logs = /** @type {string[]} */ ([]);
+    const logMock = mockFunction((msg) => {
+      logs.push(msg);
+    });
+    const savedLog = console.log;
+    console.log = logMock;
+
+    //when & then
+    await createBundle([migrationsDir]);
+    assert.deepEqual(logMock.times, 1);
+    assert.deepEqual(logs, [`Generated SQL bundle file: ${migrationsBundle}`]);
+    assertBundleFile(migrationsBundle);
+
+    const sqlStats = fs.lstatSync(
+      path.join(migrationsDir, "V001__initial_db_structure.sql")
+    );
+    const bundleStats = fs.lstatSync(migrationsBundle);
+    fs.utimesSync(
+      migrationsBundle,
+      bundleStats.atimeMs / 1000,
+      sqlStats.mtimeMs / 1000 + 60 // set bundle time to plus 60 sec.
     );
 
     //when

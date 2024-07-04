@@ -44,7 +44,7 @@ export async function createBundle(args) {
 
   const migrationsBundle = path.join(migrationsDir, bundleFileName);
   const bundleStats = getFileStats(migrationsBundle);
-  if (!bundleStats || bundleStats.mtimeMs < lastModified) {
+  if (!bundleStats || bundleStats.mtimeMs !== lastModified) {
     /** @type {MigrationBundle} */
     const bundleObj = sqlFiles.map((file) => {
       return {
@@ -57,6 +57,11 @@ export async function createBundle(args) {
       migrationsBundle,
       JSON.stringify(bundleObj, undefined, 2),
       { encoding: "utf8" }
+    );
+    fs.utimesSync(
+      migrationsBundle,
+      fs.lstatSync(migrationsBundle).atimeMs / 1000,
+      lastModified / 1000
     );
     console.log(`Generated SQL bundle file: ${migrationsBundle}`);
     return;
