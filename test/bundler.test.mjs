@@ -167,14 +167,11 @@ describe("bundler.test.mjs", () => {
     assert.deepEqual(logs, [`Generated SQL bundle file: ${migrationsBundle}`]);
     assertBundleFile(migrationsBundle);
 
-    const sqlStats = fs.lstatSync(
-      path.join(migrationsDir, "V001__initial_db_structure.sql")
-    );
     const bundleStats = fs.lstatSync(migrationsBundle);
     fs.utimesSync(
       migrationsBundle,
       bundleStats.atimeMs / 1000,
-      sqlStats.mtimeMs / 1000 - 60 // set bundle time to minus 60 sec.
+      bundleStats.mtimeMs / 1000 - 1 // set bundle time to minus 1 sec.
     );
 
     //when
@@ -208,14 +205,11 @@ describe("bundler.test.mjs", () => {
     assert.deepEqual(logs, [`Generated SQL bundle file: ${migrationsBundle}`]);
     assertBundleFile(migrationsBundle);
 
-    const sqlStats = fs.lstatSync(
-      path.join(migrationsDir, "V001__initial_db_structure.sql")
-    );
     const bundleStats = fs.lstatSync(migrationsBundle);
     fs.utimesSync(
       migrationsBundle,
       bundleStats.atimeMs / 1000,
-      sqlStats.mtimeMs / 1000 + 60 // set bundle time to plus 60 sec.
+      bundleStats.mtimeMs / 1000 + 1 // set bundle time to plus 1 sec.
     );
 
     //when
