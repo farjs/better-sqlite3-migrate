@@ -146,13 +146,15 @@ function runTransactional(db, m, statements) {
  * @returns {void}
  */
 function checkVersion(db, m, applyChanges) {
-  const query = db.prepare(`select version from ${dbTable} where version = ?;`);
+  const query = db.prepare(
+    /* sql */ `select version from ${dbTable} where version = ?;`
+  );
   const rows = query.all(m.version);
   if (rows.length === 0) {
     applyChanges();
 
     const insert = db.prepare(
-      `insert into ${dbTable} (version, name) values (?, ?);`
+      /* sql */ `insert into ${dbTable} (version, name) values (?, ?);`
     );
     insert.run(m.version, m.name);
   }
@@ -165,13 +167,13 @@ function checkVersion(db, m, applyChanges) {
 function readCurrentVersions(db) {
   return db.transaction(() => {
     db.prepare(
-      `create table if not exists ${dbTable} (
+      /* sql */ `create table if not exists ${dbTable} (
         version  integer primary key,
         name     text not null
       );`
     ).run();
 
-    const query = db.prepare(`select version from ${dbTable};`);
+    const query = db.prepare(/* sql */ `select version from ${dbTable};`);
     const rows = query.all();
     return new Set(rows.map((r) => /** @type {number} */ (r.version)));
   })();

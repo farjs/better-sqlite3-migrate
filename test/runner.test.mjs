@@ -24,7 +24,7 @@ const sqliteError = (() => {
 
 const migration1 = {
   file: "V001__test_migration_1.SQL",
-  content: `
+  content: /* sql */ `
     -- comment 1
     -- comment 2
     create table test_migrations (
@@ -45,8 +45,7 @@ const migration1 = {
 
 const migration2 = {
   file: "V002__test_migration_2.sql",
-  content:
-    "insert into test_migrations (new_name) values ('test 3'), ('test 4');",
+  content: /* sql */ `insert into test_migrations (new_name) values ('test 3'), ('test 4');`,
 };
 
 describe("runner.test.mjs", () => {
@@ -178,11 +177,11 @@ describe("runner.test.mjs", () => {
         migration1,
         {
           ...migration2,
-          content: `${migration2.content}; insert into test_migrations (new_name) values ('test 5'), ();`,
+          content: /* sql */ `${migration2.content}; insert into test_migrations (new_name) values ('test 5'), ();`,
         },
         {
           file: "V003__test_migration_3.sql",
-          content: "insert into test_migrations (new_name) values ('test 7');",
+          content: /* sql */ `insert into test_migrations (new_name) values ('test 7');`,
         },
       ]);
     } catch (error) {
@@ -221,7 +220,7 @@ describe("runner.test.mjs", () => {
         migration1,
         {
           ...migration2,
-          content: `${migration2.content}; insert into test_migrations (new_name) values ('test 5'), ();`,
+          content: /* sql */ `${migration2.content}; insert into test_migrations (new_name) values ('test 5'), ();`,
         },
       ]);
     } catch (error) {
@@ -234,7 +233,7 @@ describe("runner.test.mjs", () => {
       migration1,
       {
         ...migration2,
-        content: `${migration2.content}; insert into test_migrations (new_name) values ('test 5');`,
+        content: /* sql */ `${migration2.content}; insert into test_migrations (new_name) values ('test 5');`,
       },
     ]);
 
@@ -275,7 +274,7 @@ describe("runner.test.mjs", () => {
     await runBundle(db, [
       {
         file: "V001__non-transactional_migration.sql",
-        content: `
+        content: /* sql */ `
           -- non-transactional
           PRAGMA foreign_keys = ON;
         `,
@@ -308,7 +307,7 @@ describe("runner.test.mjs", () => {
       await runBundle(db, [
         {
           file: "V001__non-transactional_migration.sql",
-          content: `
+          content: /* sql */ `
             -- non-transactional
             PRAGMA foreign_keys = ON;
           
@@ -327,7 +326,7 @@ describe("runner.test.mjs", () => {
         },
         {
           file: "V002__transactional_migration.sql",
-          content: `          
+          content: /* sql */ `
             insert into categories (name) values ('category 1'), ('category 2');
             insert into products (cat_id, name) values (3, 'product 1')
           `,
@@ -430,7 +429,9 @@ describe("runner.test.mjs", () => {
  */
 function assertDb(db, expected) {
   const results = db.transaction(() => {
-    const query = db.prepare(`select * from test_migrations order by id;`);
+    const query = db.prepare(
+      /* sql */ `select * from test_migrations order by id;`
+    );
     const rows = query.all();
     return rows.map((r) => {
       return {
@@ -449,7 +450,9 @@ function assertDb(db, expected) {
  */
 function assertSchema(db, expected) {
   const results = db.transaction(() => {
-    const query = db.prepare(`select * from schema_versions order by version;`);
+    const query = db.prepare(
+      /* sql */ `select * from schema_versions order by version;`
+    );
     const rows = query.all();
     return rows.map((r) => {
       return {
