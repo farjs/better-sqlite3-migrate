@@ -37,11 +37,11 @@
     "bun"
   ],
   "engines": {
-    "node": ">=14.16",
+    "node": ">=18",
     "bun": ">=0.8"
   },
   "dependencies": {
-    "@farjs/better-sqlite3-wrapper": "^1.0.1"
+    "@farjs/better-sqlite3-wrapper": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.6.2",
