@@ -19,7 +19,7 @@ const { describe, it } = await (async () => {
 
 const sqliteError = (() => {
   // @ts-ignore
-  return process.isBun ? "SQLiteError" : "SqliteError";
+  return process.isBun ? "SQLiteError" : "Error";
 })();
 
 const migration1 = {

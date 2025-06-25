@@ -5,7 +5,7 @@
   "license": "MIT",
   "description": "Automates Sqlite DB schema versioning",
   "scripts": {
-    "lint": "quick-lint-js ./*.mjs",
+    "lint": "quick-lint-js ./*.mjs ./src/**/*.mjs ./test/**/*.mjs",
     "test": "npx sql-bundle ./test/migrations && tsc && bun test && node ./test/all.mjs",
     "format": "prettier **/*.mjs --write",
     "formatCheck": "prettier **/*.mjs --check"
@@ -37,11 +37,11 @@
     "bun"
   ],
   "engines": {
-    "node": ">=18",
+    "node": ">=16",
     "bun": ">=0.8"
   },
   "dependencies": {
-    "@farjs/better-sqlite3-wrapper": "^2.0.0"
+    "@farjs/better-sqlite3-wrapper": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.6.2",
