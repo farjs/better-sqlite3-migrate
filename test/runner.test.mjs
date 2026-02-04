@@ -340,7 +340,7 @@ describe("runner.test.mjs", () => {
     console.log = savedLog;
     assert.deepEqual(
       `${resError}`,
-      `${sqliteError}: FOREIGN KEY constraint failed`
+      `${sqliteError}: FOREIGN KEY constraint failed`,
     );
     assert.deepEqual(logMock.times, 3);
     assert.deepEqual(logs, [
@@ -413,11 +413,11 @@ describe("runner.test.mjs", () => {
     console.log = savedLog;
     assert.deepEqual(
       resError,
-      Error(`Cannot parse migration version and name from: ${fileName}`)
+      Error(`Cannot parse migration version and name from: ${fileName}`),
     );
     assert.deepEqual(
       capturedError,
-      `DB: Error: Cannot parse migration version and name from: ${fileName}`
+      `DB: Error: Cannot parse migration version and name from: ${fileName}`,
     );
     assert.deepEqual(logMock.times, 1);
   });
@@ -430,7 +430,7 @@ describe("runner.test.mjs", () => {
 function assertDb(db, expected) {
   const results = db.transaction(() => {
     const query = db.prepare(
-      /* sql */ `select * from test_migrations order by id;`
+      /* sql */ `select * from test_migrations order by id;`,
     );
     const rows = query.all();
     return rows.map((r) => {
@@ -451,7 +451,7 @@ function assertDb(db, expected) {
 function assertSchema(db, expected) {
   const results = db.transaction(() => {
     const query = db.prepare(
-      /* sql */ `select * from schema_versions order by version;`
+      /* sql */ `select * from schema_versions order by version;`,
     );
     const rows = query.all();
     return rows.map((r) => {

@@ -60,7 +60,7 @@ export async function createBundle(args) {
     fs.writeFileSync(
       migrationsBundle,
       JSON.stringify(bundleObj, undefined, 2),
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     );
     fs.utimesSync(migrationsBundle, lastModifiedSeconds, lastModifiedSeconds);
     console.log(`Generated SQL bundle file: ${migrationsBundle}`);

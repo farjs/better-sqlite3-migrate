@@ -49,7 +49,7 @@ export async function runBundle(db, bundle) {
     }
 
     throw new Error(
-      `Cannot parse migration version and name from: ${fileName}`
+      `Cannot parse migration version and name from: ${fileName}`,
     );
   }
 
@@ -59,7 +59,7 @@ export async function runBundle(db, bundle) {
       bundle.map((item) => {
         const { version, name } = parseVersionAndName(item.file);
         return { version, name, sql: item.content };
-      })
+      }),
     );
   } catch (error) {
     console.log(`DB: ${error}`);
@@ -84,10 +84,10 @@ function run(db, all) {
         .map((s) => s.trim())
         .filter((s) => s.length !== 0);
       const nonTransactional = statements.filter((s) =>
-        s.includes("non-transactional")
+        s.includes("non-transactional"),
       );
       const transactional = statements.filter(
-        (s) => !s.includes("non-transactional")
+        (s) => !s.includes("non-transactional"),
       );
 
       runNonTransactional(db, nonTransactional);
@@ -147,14 +147,14 @@ function runTransactional(db, m, statements) {
  */
 function checkVersion(db, m, applyChanges) {
   const query = db.prepare(
-    /* sql */ `select version from ${dbTable} where version = ?;`
+    /* sql */ `select version from ${dbTable} where version = ?;`,
   );
   const rows = query.all(m.version);
   if (rows.length === 0) {
     applyChanges();
 
     const insert = db.prepare(
-      /* sql */ `insert into ${dbTable} (version, name) values (?, ?);`
+      /* sql */ `insert into ${dbTable} (version, name) values (?, ?);`,
     );
     insert.run(m.version, m.name);
   }
@@ -170,7 +170,7 @@ function readCurrentVersions(db) {
       /* sql */ `create table if not exists ${dbTable} (
         version  integer primary key,
         name     text not null
-      );`
+      );`,
     ).run();
 
     const query = db.prepare(/* sql */ `select version from ${dbTable};`);

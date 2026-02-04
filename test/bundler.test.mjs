@@ -40,7 +40,7 @@ describe("bundler.test.mjs", () => {
     assert.deepEqual(resError, null);
     assert.deepEqual(
       capturedError,
-      `Error: Migrations folder path expected as first argument`
+      `Error: Migrations folder path expected as first argument`,
     );
     assert.deepEqual(errorMock.times, 1);
   });
@@ -67,7 +67,7 @@ describe("bundler.test.mjs", () => {
     assert.deepEqual(resError, null);
     assert.deepEqual(
       capturedError,
-      `Error: Migrations folder "1234" doesn't exist`
+      `Error: Migrations folder "1234" doesn't exist`,
     );
     assert.deepEqual(errorMock.times, 1);
   });
@@ -171,7 +171,7 @@ describe("bundler.test.mjs", () => {
     fs.utimesSync(
       migrationsBundle,
       bundleStats.atimeMs / 1000,
-      bundleStats.mtimeMs / 1000 - 1 // set bundle time to minus 1 sec.
+      bundleStats.mtimeMs / 1000 - 1, // set bundle time to minus 1 sec.
     );
 
     //when
@@ -209,7 +209,7 @@ describe("bundler.test.mjs", () => {
     fs.utimesSync(
       migrationsBundle,
       bundleStats.atimeMs / 1000,
-      bundleStats.mtimeMs / 1000 + 1 // set bundle time to plus 1 sec.
+      bundleStats.mtimeMs / 1000 + 1, // set bundle time to plus 1 sec.
     );
 
     //when
@@ -241,6 +241,6 @@ function assertBundleFile(bundleFile) {
     "file": "V002__rename_db_field.sql",
     "content": "\\n/*\\n * multi-line comment\\n */\\n\\nalter table test_migrations rename column original_name to new_name;\\n\\ninsert into test_migrations (new_name) values ('test 2');\\n"
   }
-]`
+]`,
   );
 }
