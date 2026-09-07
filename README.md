@@ -1,3 +1,4 @@
+[![NO AI](https://raw.githubusercontent.com/nuxy/no-ai-badge/master/badge.svg)](https://github.com/nuxy/no-ai-badge#no-ai-badge)
 [![CI](https://github.com/farjs/better-sqlite3-migrate/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/farjs/better-sqlite3-migrate/actions/workflows/ci.yml?query=workflow%3Aci+branch%3Amain)
 [![Coverage Status](https://coveralls.io/repos/github/farjs/better-sqlite3-migrate/badge.svg?branch=main)](https://coveralls.io/github/farjs/better-sqlite3-migrate?branch=main)
 [![npm version](https://img.shields.io/npm/v/@farjs/better-sqlite3-migrate)](https://www.npmjs.com/package/@farjs/better-sqlite3-migrate)
